@@ -1,5 +1,5 @@
 // third-party module
-require('dotenv').config(); 환경변수 사용
+require('dotenv').config(); // 환경변수 사용
 
 const express = require('express');
 
