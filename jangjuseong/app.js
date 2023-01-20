@@ -35,15 +35,24 @@ app.get('/ping', (req, res) => {
   res.status(200).json({ message: 'pong' });
 });
 
-app.post('/users/signup', async (req, res, next) => {
-  const { name, email, password, profile_image } = req.body;
+app.post('/users/signup', async (req, res) => {
+  const { name, email, password, profileImage } = req.body;
 
   await mysqlDataSource.query(
-    `INSERT INTO
-      users (name, email, password, profile_image)
-      VALUES (?, ?, ?, ?);
+    `INSERT INTO users (
+      name, 
+      email, 
+      password, 
+      profile_image
+    )
+      VALUES (
+        ?, 
+        ?, 
+        ?, 
+        ?
+        );
     `,
-    [name, email, password, profile_image]
+    [name, email, password, profileImage]
   );
 
   res.status(200).json({ message: 'userCreated' });

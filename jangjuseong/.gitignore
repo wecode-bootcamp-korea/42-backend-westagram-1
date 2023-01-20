@@ -397,4 +397,9 @@ zsdoc/data
 /tests/_output/*
 !/tests/_output/.gitkeep
 
+### mySQL ###
+./db/schema.sql
+
+
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,vim,webstorm,macos,linux,windows,zsh,node
