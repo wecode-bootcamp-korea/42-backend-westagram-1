@@ -35,6 +35,29 @@ app.get('/ping', (req, res) => {
   res.status(200).json({ message: 'pong' });
 });
 
+app.post('/users/signup', async (req, res) => {
+  const { name, email, password, profileImage } = req.body;
+
+  await mysqlDataSource.query(
+    `INSERT INTO users (
+      name, 
+      email, 
+      password, 
+      profile_image
+    )
+      VALUES (
+        ?, 
+        ?, 
+        ?, 
+        ?
+        );
+    `,
+    [name, email, password, profileImage]
+  );
+
+  res.status(201).json({ message: 'userCreated' });
+});
+
 const PORT = process.env.PORT;
 const start = async () => {
   try {
