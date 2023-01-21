@@ -55,7 +55,7 @@ app.post('/users/signup', async (req, res) => {
     [name, email, password, profileImage]
   );
 
-  res.status(200).json({ message: 'userCreated' });
+  res.status(201).json({ message: 'userCreated' });
 });
 
 const PORT = process.env.PORT;
