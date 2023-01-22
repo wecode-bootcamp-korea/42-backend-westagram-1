@@ -1,14 +1,12 @@
-const http = require('http')
+dotenv.config()
+
 const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
-
-dotenv.config()
-
 const { DataSource } = require('typeorm')
 
-const myDataSource = new DataSource({
+const mysqlDataSource = new DataSource({
     type: process.env.TYPEORM_CONNECTION,
     host: process.env.TYPEORM_HOST,
     port: process.env.TYPEORM_PORT,
@@ -17,8 +15,14 @@ const myDataSource = new DataSource({
     database: process.env.TYPEORM_DATABASE
 })
 
-myDataSource.initialize()
-    .then(() => { console.log('data server has been initialized!') })
+mysqlDataSource.initialize()
+    .then(() => {
+        console.log('data server has been initialized!')
+    })
+
+    .catch(err => {
+        console.log('Failed to Connect Database')
+    })
 
 const app = express()
 
@@ -32,12 +36,17 @@ app.get('/ping', (req, res) => {
 
 app.post('/sign_up', async (req, res, next) => {
     const { name, password, email } = req.body
-    await myDataSource.query(
+    await mysqlDataSource.query(
         `INSERT INTO users (
             name, 
             password, 
-            email) 
-            VALUES (?,?,?);`,
+            email
+            ) 
+            VALUES (
+                ?,
+                ?,
+                ?
+                );`,
         [name, password, email]
     )
     res.status(201).json({ message: 'userCreated' })
@@ -45,9 +54,12 @@ app.post('/sign_up', async (req, res, next) => {
 
 
 
-const server = http.createServer(app)
 const PORT = process.env.PORT
 
-const start = async () => { server.listen(PORT, () => { console.log(`server is listening on ${PORT}`) }) }
+const start = async () => {
+    app.listen(PORT, () => {
+        console.log(`server is listening on ${PORT}`)
+    })
+}
 
 start()
