@@ -135,7 +135,7 @@ app.patch('/edit/:userId/:postId', async (req, res) => {
 
 
     await mysqlDataSource.query(
-        `SELECT users.id as userId, users.name as userName, posts.id as postingId, posts.title as postingTitle, posts.content as postingContent FROM users INNER JOIN posts ON users.id = ${userId} AND posts.id = ${postId}`
+        `SELECT users.id as userId, users.name as userName, posts.id as postingId, posts.title as postingTitle, posts.content as postingContent FROM users INNER JOIN posts ON users.id = ${userId} AND posts.id = ${postId} WHERE users.id = posts.user_id`
         , (err, rows) => {
             res.status(201).json({ data: rows })
         }
