@@ -27,12 +27,10 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("combined"));
 
-//health check
 app.get("/ping", (req, res) => {
   return res.json({ message: "pong" });
 });
 
-//create user
 app.post("/users/signup", async (req, res) => {
   const { username, firstName, lastName, age, email, password } = req.body;
 
