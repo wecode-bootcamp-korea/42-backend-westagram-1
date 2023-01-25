@@ -1,4 +1,4 @@
--- migrate:up
+ -- migrate:up
 CREATE TABLE posts (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
