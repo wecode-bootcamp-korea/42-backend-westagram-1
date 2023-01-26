@@ -92,15 +92,15 @@ app.get('/posts', async (req, res) => {
 })
 
 
-app.get('/posts/:userId', async (req, res) => {
-    const { userId } = req.params;
+app.get('/posts/user', async (req, res) => {
+    const { userId } = req.body
 
-    await mysqlDataSource.query(
+    const [userPost] = await mysqlDataSource.query(
         `SELECT
             users.id as userId,
             users.profile_image as userprofileImage,
             pp.postings
-            FROM users
+        FROM users
         LEFT JOIN (
             SELECT 
             user_id,
@@ -115,14 +115,12 @@ app.get('/posts/:userId', async (req, res) => {
         FROM posts 
         GROUP BY user_id  
         ) pp ON users.id = pp.user_id
-            WHERE users.id = ${userId};`
-        , (err, rows) => {
-            res.status(201).json({ data: rows })
-        }
-    )
+            WHERE users.id = ?;`
+        , [userId])
+    res.status(201).json({ data: userPost })
 })
 
-app.patch('/edit', async (req, res) => {
+app.patch('/posts', async (req, res) => {
     const { postingContent, userId, postId } = req.body
 
     await mysqlDataSource.query(
