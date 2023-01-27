@@ -167,8 +167,9 @@ app.delete('/posts/:postId', async (req, res) => {
   await mysqlDataSource.query(
     `DELETE
     FROM posts
-    WHERE posts.id = ${postId}
-    `
+    WHERE posts.id = ?
+    `,
+    [postId]
   );
 
   return res.status(200).json({ message: 'postingDeleted' });
