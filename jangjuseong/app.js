@@ -5,6 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const { DataSource } = require('typeorm');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const mysqlDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION,
@@ -196,6 +197,31 @@ app.post('/likes/:userId/:postId', async (req, res) => {
   );
 
   return res.status(201).json({ message: 'likeCreated' });
+});
+
+app.get('/users/signup', async (req, res) => {
+  const { email, password } = req.body;
+
+  const [userData] = await mysqlDataSource.query(
+    `
+    SELECT * 
+    FROM users
+    WHERE email=?
+    `,
+    [email]
+  );
+
+  const payLoad = { email: userData.email };
+  const secretKey = 'mySecretKey';
+  const jwtToken = jwt.sign(payLoad, secretKey);
+
+  const checkHash = await bcrypt.compare(password, userData.password);
+
+  if (!checkHash) {
+    return res.status(400).json({ message: 'Invalid User' });
+  }
+
+  return res.status(200).json({ accessToken: jwtToken });
 });
 
 const PORT = process.env.PORT;
