@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const { DataSource } = require('typeorm');
+const bcrypt = require('bcrypt');
 
 const mysqlDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION,
@@ -38,6 +39,9 @@ app.get('/ping', (req, res) => {
 app.post('/users/signup', async (req, res) => {
   const { name, email, password, profileImage } = req.body;
 
+  const saltRounds = 12;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
   await mysqlDataSource.query(
     `INSERT INTO users (
       name, 
@@ -52,7 +56,7 @@ app.post('/users/signup', async (req, res) => {
         ?
       );
     `,
-    [name, email, password, profileImage]
+    [name, email, hashedPassword, profileImage]
   );
 
   return res.status(201).json({ message: 'userCreated' });
