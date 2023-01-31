@@ -400,4 +400,4 @@ zsdoc/data
 # End of https://www.toptal.com/developers/gitignore/api/node,zsh,visualstudiocode,macos,linux,vim,webstorm,windows
 
 #db migrations file
-db/schema.sql
+/db/schema.sql
