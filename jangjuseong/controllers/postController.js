@@ -36,7 +36,7 @@ const deletePost = async (req, res) => {
 
   await postService.postDelete(postId);
 
-  return res.status(200).json({ message: 'postingDeleted' });
+  return res.status(204).json({ message: 'postingDeleted' });
 };
 
 module.exports = {
