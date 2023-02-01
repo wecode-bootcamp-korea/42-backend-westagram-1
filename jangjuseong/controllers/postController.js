@@ -4,7 +4,7 @@ const createPost = async (req, res) => {
   try {
     const { title, content, postImgUrl, userId } = req.body;
 
-    if (!title | !content | !postImgUrl | !userId) {
+    if (!title || !content || !postImgUrl || !userId) {
       const err = new Error('⚠️ Key Error!');
       err.code = 400;
       throw err;
@@ -12,7 +12,7 @@ const createPost = async (req, res) => {
 
     await postService.createPost(title, content, postImgUrl, userId);
 
-    return res.status(200).json({ message: 'postCreated' });
+    return res.status(201).json({ message: 'postCreated' });
   } catch (error) {
     return res.status(error.code).json({ message: error.message });
   }
@@ -45,7 +45,7 @@ const updatePost = async (req, res) => {
 
     const result = await postService.updatePost(content, userId, postId);
 
-    return res.status(201).json({ data: result });
+    return res.status(200).json({ data: result });
   } catch (error) {
     return res.status(error.code).json({ message: error.message });
   }
