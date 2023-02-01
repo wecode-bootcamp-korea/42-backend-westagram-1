@@ -1,6 +1,6 @@
 const { mysqlDataSource } = require('./datasource')
 
-const likePostResult = async (userId, postId) => {
+const createLikePostByUserId = async (userId, postId) => {
     return await mysqlDataSource.query(
         `INSERT INTO likes (
                 user_id,
@@ -11,4 +11,8 @@ const likePostResult = async (userId, postId) => {
         [userId, postId])
 }
 
-module.exports = { likePostResult }
+
+
+module.exports = {
+    createLikePostByUserId
+}

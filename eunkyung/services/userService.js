@@ -1,18 +1,18 @@
 const userDao = require('../models/userDao')
 
-const signUp = async (name, password, email, profileImage) => {
+const createUser = async (name, password, email, profileImage) => {
 
-    const createUser = await userDao.createUser(
+    const createUserResult = await userDao.createUser(
         name,
         password,
         email,
         profileImage
     )
 
-    return createUser
+    return createUserResult
 }
 
 
 module.exports = {
-    signUp
+    createUser
 }

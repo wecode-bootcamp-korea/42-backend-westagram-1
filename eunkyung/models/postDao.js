@@ -13,7 +13,7 @@ const createPost = async (title, content, postImageUrl, userId) => {
     )
 }
 
-const userPostResult = async (userId) => {
+const getPostByUserId = async (userId) => {
     return await mysqlDataSource.query(
         `SELECT
         users.id as userId,
@@ -35,7 +35,7 @@ const userPostResult = async (userId) => {
         , [userId])
 }
 
-const postListResult = async () => {
+const getPosts = async () => {
     return await mysqlDataSource.query(
         `SELECT
             users.id as userId,
@@ -43,12 +43,12 @@ const postListResult = async () => {
             posts.user_id as postingId,
             posts.post_image_url as postingImageUrl,
             posts.content as postingContent 
-        FROM users 
-        INNER JOIN posts ON users.id = posts.user_id`
+        FROM posts 
+        INNER JOIN users ON users.id = posts.user_id`
     )
 }
 
-const updatePostResult = async (content, userId, postId) => {
+const updatePost = async (content, userId, postId) => {
     await mysqlDataSource.query(
         `UPDATE posts 
          SET 
@@ -71,7 +71,7 @@ const updatePostResult = async (content, userId, postId) => {
     return result
 }
 
-const deletePostResult = async (postId) => {
+const deletePost = async (postId) => {
     await mysqlDataSource.query(
         `DELETE FROM posts WHERE posts.id = ?`,
         [postId])
@@ -80,8 +80,8 @@ const deletePostResult = async (postId) => {
 
 module.exports = {
     createPost,
-    userPostResult,
-    postListResult,
-    updatePostResult,
-    deletePostResult
+    getPostByUserId,
+    getPosts,
+    updatePost,
+    deletePost
 }

@@ -1,11 +1,13 @@
 const likeService = require('../services/likeService')
 
 
-const likePost = async (req, res) => {
+const createLikePostByUserId = async (req, res) => {
     const { userId, postId } = req.body
-    await likeService.likePost(userId, postId)
-    return res.status(201).json({ message: 'I like this POST' })
+
+    await likeService.createLikePostByUserId(userId, postId)
+    return res.status(201).json({ message: 'Like Success' })
+
 }
 
 
-module.exports = { likePost }
+module.exports = { createLikePostByUserId }
