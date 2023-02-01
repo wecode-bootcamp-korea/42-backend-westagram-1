@@ -13,6 +13,10 @@ const signIn = async (req, res) => {
 
   const result = await userService.signIn(email, password);
 
+  if (result === 'invalidUser') {
+    return res.status(401).json({ message: 'Invalid User' });
+  }
+
   return res.status(200).json({ accessToken: result });
 };
 

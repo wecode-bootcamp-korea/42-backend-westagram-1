@@ -25,7 +25,7 @@ const signIn = async (email, password) => {
 
   const checkHash = await bcrypt.compare(password, userData.password);
   if (!checkHash) {
-    return res.status(401).json({ message: 'Invalid User' });
+    return 'invalidUser';
   }
 
   return jwt.sign(payLoad, SECRET_KEY);
