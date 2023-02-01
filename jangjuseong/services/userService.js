@@ -8,6 +8,15 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const signUp = async (name, email, password, profileImage) => {
   const saltRounds = 12;
   const hashPassword = await bcrypt.hash(password, saltRounds);
+
+  const [userInfo] = await userDao.getUser(email);
+
+  if (userInfo.email == email) {
+    const err = new Error('Email Already Exists.');
+    err.code = 400;
+    throw err;
+  }
+
   const createUser = await userDao.createUser(
     name,
     email,
