@@ -1,23 +1,39 @@
 const userService = require('../services/userService');
 
 const signUp = async (req, res) => {
-  const { name, email, password, profileImage } = req.body;
+  try {
+    const { name, email, password, profileImage } = req.body;
 
-  await userService.signUp(name, email, password, profileImage);
+    if (!name || !email || !password) {
+      const err = new Error('⚠️ Key Error!');
+      err.code = 400;
+      throw err;
+    }
 
-  res.status(201).json({ message: 'createUser' });
+    await userService.signUp(name, email, password, profileImage);
+
+    res.status(201).json({ message: 'createUser' });
+  } catch (error) {
+    return res.status(error.code).json({ message: error.message });
+  }
 };
 
 const signIn = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const result = await userService.signIn(email, password);
+    if (!email || !password) {
+      const err = new Error('⚠️ Key Error!');
+      err.code = 400;
+      throw err;
+    }
 
-  if (result === 'invalidUser') {
-    return res.status(401).json({ message: 'Invalid User' });
+    const result = await userService.signIn(email, password);
+
+    return res.status(201).json({ accessToken: result });
+  } catch (error) {
+    return res.status(error.code).json({ message: error.message });
   }
-
-  return res.status(200).json({ accessToken: result });
 };
 
 module.exports = {

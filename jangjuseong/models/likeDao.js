@@ -1,6 +1,6 @@
-const mysqlDataSource = require('./daoModule');
+const mysqlDataSource = require('./dataSource');
 
-const postLike = async (userId, postId) => {
+const createLike = async (userId, postId) => {
   await mysqlDataSource.query(
     `
     INSERT INTO likes (
@@ -17,5 +17,5 @@ const postLike = async (userId, postId) => {
 };
 
 module.exports = {
-  postLike,
+  createLike,
 };

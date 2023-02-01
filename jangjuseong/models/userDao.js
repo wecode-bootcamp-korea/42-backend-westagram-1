@@ -1,4 +1,4 @@
-const mysqlDataSource = require('./daoModule');
+const mysqlDataSource = require('./dataSource');
 
 const createUser = async (name, email, password, profileImage) => {
   await mysqlDataSource.query(
@@ -20,7 +20,7 @@ const createUser = async (name, email, password, profileImage) => {
   );
 };
 
-const signInUser = async (email) => {
+const getUser = async (email) => {
   return await mysqlDataSource.query(
     `
     SELECT
@@ -36,5 +36,5 @@ const signInUser = async (email) => {
 
 module.exports = {
   createUser,
-  signInUser,
+  getUser,
 };

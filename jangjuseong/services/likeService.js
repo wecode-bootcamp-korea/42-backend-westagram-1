@@ -1,9 +1,9 @@
 const likeDao = require('../models/likeDao');
 
-const likePost = async (userId, postId) => {
-  return await likeDao.postLike(userId, postId);
+const createLike = async (userId, postId) => {
+  return await likeDao.createLike(userId, postId);
 };
 
 module.exports = {
-  likePost,
+  createLike,
 };

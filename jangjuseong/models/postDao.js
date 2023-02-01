@@ -1,4 +1,4 @@
-const mysqlDataSource = require('./daoModule');
+const mysqlDataSource = require('./dataSource');
 
 const createPost = async (title, content, postImgUrl, userId) => {
   await mysqlDataSource.query(
@@ -20,7 +20,7 @@ const createPost = async (title, content, postImgUrl, userId) => {
   );
 };
 
-const getPost = async () => {
+const getPosts = async () => {
   return await mysqlDataSource.query(
     `
     SELECT
@@ -35,7 +35,7 @@ const getPost = async () => {
   );
 };
 
-const getPostbyUser = async (userId) => {
+const getPostByUserId = async (userId) => {
   return await mysqlDataSource.query(
     `
     SELECT
@@ -104,8 +104,8 @@ const deletePost = async (postId) => {
 
 module.exports = {
   createPost,
-  getPost,
-  getPostbyUser,
+  getPosts,
+  getPostByUserId,
   updatePost,
   deletePost,
 };

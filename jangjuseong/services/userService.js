@@ -19,13 +19,15 @@ const signUp = async (name, email, password, profileImage) => {
 };
 
 const signIn = async (email, password) => {
-  const [userData] = await userDao.signInUser(email);
+  const [userData] = await userDao.getUser(email);
 
   const payLoad = { userId: userData.id };
 
   const checkHash = await bcrypt.compare(password, userData.password);
   if (!checkHash) {
-    return 'invalidUser';
+    const err = new Error('Invalid User');
+    err.code = 401;
+    throw err;
   }
 
   return jwt.sign(payLoad, SECRET_KEY);
