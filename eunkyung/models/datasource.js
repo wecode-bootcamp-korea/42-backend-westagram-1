@@ -1,21 +1,23 @@
-const { DataSource } = require('typeorm')
+const { DataSource } = require("typeorm");
 
 const mysqlDataSource = new DataSource({
-    type: process.env.TYPEORM_CONNECTION,
-    host: process.env.TYPEORM_HOST,
-    port: process.env.TYPEORM_PORT,
-    username: process.env.TYPEORM_USERNAME,
-    password: process.env.TYPEORM_PASSWORD,
-    database: process.env.TYPEORM_DATABASE
-})
+  type: process.env.TYPEORM_CONNECTION,
+  host: process.env.TYPEORM_HOST,
+  port: process.env.TYPEORM_PORT,
+  username: process.env.TYPEORM_USERNAME,
+  password: process.env.TYPEORM_PASSWORD,
+  database: process.env.TYPEORM_DATABASE,
+});
 
-mysqlDataSource.initialize()
-    .then(() => {
-        console.log('Data server has been initiallized!')
-    })
+mysqlDataSource
+  .initialize()
+  .then(() => {
+    console.log("Data server has been initiallized!");
+  })
 
-    .catch(err => {
-        console.log('Failed to connect database')
-    })
+  .catch((err) => {
+    console.log(err);
+    console.log("Failed to connect database");
+  });
 
-module.exports = { mysqlDataSource }
+module.exports = { mysqlDataSource };
