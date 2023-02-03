@@ -16,9 +16,9 @@ const createPost = async (title, content, postImageUrl, userId) => {
 const getPostByUserId = async (userId) => {
   return await mysqlDataSource.query(
     `SELECT
-    users.id as userId,
-    users.profile_image as userprofileImage,
-    pp.postings
+      users.id as userId,
+      users.profile_image as userprofileImage,
+      pp.postings
     FROM users
     LEFT JOIN (
       SELECT 

@@ -15,23 +15,23 @@ const createUser = async (name, password, email, profileImage) => {
   return createUserResult;
 };
 
-const emailCheckLogin = async (email, password) => {
-  const [userInfo] = await userDao.emailCheckLogin(email);
+const login = async (email, password) => {
+  const [userInfo] = await userDao.getUserByEmail(email);
   if (!userInfo) {
-    return undefined;
+    throw new Error("Please signUp!!!!");
   }
   const checkPw = await bcrypt.compare(password, userInfo.password);
+  const payLoad = { userId: userInfo.id };
+  const secretKey = process.env.secretKey;
 
-  if (checkPw === true) {
-    const payLoad = { exp: 60000 };
-    const secretKey = "mySecretKey";
-    return jwt.sign(payLoad, secretKey);
-  } else {
-    return "wrongPw";
+  if (!checkPw) {
+    throw new Error("please check your password");
   }
+
+  return jwt.sign(payLoad, secretKey);
 };
 
 module.exports = {
   createUser,
-  emailCheckLogin,
+  login,
 };
