@@ -1,4 +1,5 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 
 const express = require("express");
 const cors = require("cors");
@@ -16,12 +17,11 @@ app.get("/ping", (req, res) => {
   res.json({ message: "pong" });
 });
 
-const server = http.createServer(app);
 const PORT = process.env.PORT;
 
 const start = async () => {
   try {
-    server.listen(PORT, () => console.log(`Server is listening on ${PORT}`));
+    app.listen(PORT, () => console.log(`Server is listening on ${PORT}`));
   } catch (err) {
     console.error(err);
   }

@@ -23,8 +23,8 @@ const updatePost = async (req, res) => {
     const { title, content, token } = req.body;
 
     if (!postId || !token) {
-        return res.status(400).json({ message: "KEY_ERROR" });
-      }
+      return res.status(400).json({ message: "KEY_ERROR" });
+    }
 
     await postService.updatePost(postId, title, content, token);
     return res.status(200).json({ message: "POST_UPDATED" });
@@ -57,7 +57,7 @@ const searchPost = async (req, res) => {
   }
 };
 
-// delete user's post 
+// delete user's post
 const deletePost = async (req, res) => {
   try {
     const { postId } = req.params;
@@ -71,19 +71,17 @@ const deletePost = async (req, res) => {
 };
 
 // like user post
-const likePost = (res, req) => {
+const likePost = async (res, req) => {
   try {
     const { postId } = req.param;
     const { token } = req.body;
-    await postService.updateStatus(token,postId);
+    await postService.updateStatus(token, postId);
     return res.status(200).json({ message: "LIKE_STATUS_UPDATED" });
-
   } catch (err) {
     console.log(err);
     return res.status(err.statusCode || 500), json({ message: err.message });
   }
 };
-
 
 module.exports = {
   createPost,

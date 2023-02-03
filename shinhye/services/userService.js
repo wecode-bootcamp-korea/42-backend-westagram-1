@@ -1,4 +1,5 @@
 //service - 비즈니스 규칙과 로직이 접목되는 레이어
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userDao = require("../models/userDao");
@@ -29,7 +30,12 @@ const signUp = async (name, email, profile_image, password) => {
 
   // bcrypt 모듈로 사용자 비밀번호 암호화하기
   const hashedPassword = await bcrypt.hash(password, saltRounds);
-  const createUser = await userDao.createUser(name, email, profile_image, hashedPassword);
+  const createUser = await userDao.createUser(
+    name,
+    email,
+    profile_image,
+    hashedPassword
+  );
 
   return createUser;
 };
@@ -38,22 +44,21 @@ const login = async (email, password) => {
   try {
     const [userInfo] = await userDao.getUser(email);
     const comparePassword = await bcrypt.compare(password, userInfo.password);
-    if (!comparePassword){
+    if (!comparePassword) {
       const err = new Error("INVALID_PASSWORD");
       err.statusCode = 401;
       throw err;
     }
-    await userDao.loginUser(email,password);
+    await userDao.loginUser(email, password);
 
-    const payLoad = { "email": email };
+    const payLoad = { email: email };
     const jwtToken = await jwt.sign(payLoad, secretKey);
     return jwtToken;
-    } catch {
-      const error = new Error("INVALID_DATA");
-      error.statusCode = 500;
-      throw error;
-    }
-    }
+  } catch {
+    const error = new Error("INVALID_DATA");
+    error.statusCode = 500;
+    throw error;
+  }
 };
 
 module.exports = { signUp, login };
