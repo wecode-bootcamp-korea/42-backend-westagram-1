@@ -7,7 +7,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 const signUp = async (name, email, password, profileImage) => {
   const pwValidation = new RegExp(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&]{8,}/
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@$#$%^&*\-?])[A-Za-z\d~!@$#$%^&*\-?]{8,}/
   );
 
   if (!pwValidation.test(password)) {
