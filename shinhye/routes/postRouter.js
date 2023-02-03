@@ -9,4 +9,4 @@ router.get("/posts/:userId", postController.searchPost);
 router.delete("/posts/:postId", postController.deletePost);
 router.patch("/posts/:postId", postController.likePost);
 
-module.exports = { router };
+module.exports = router;

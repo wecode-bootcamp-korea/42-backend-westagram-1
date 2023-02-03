@@ -1,7 +1,7 @@
 const { DataSource } = require("typeorm");
 
 const AppDataSource = new DataSource({
-  type: "mysql",
+  type: process.env.TYPEORM_CONNECTION,
   host: process.env.TYPEORM_HOST,
   port: process.env.TYPEORM_PORT,
   username: process.env.TYPEORM_USERNAME,
@@ -18,4 +18,4 @@ AppDataSource.initialize()
     AppDataSource.destroy();
   });
 
-module.exports = { AppDataSource };
+module.exports = AppDataSource;

@@ -3,7 +3,8 @@ const postService = require("../services/postService");
 
 const createPost = async (req, res) => {
   try {
-    const { title, content, token } = req.body;
+    const { title, content } = req.body;
+    const { token } = req.headers.authorization;
 
     if (!title || !token) {
       return res.status(400).json({ message: "KEY_ERROR" });
@@ -20,7 +21,8 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
   try {
     const { postId } = req.params;
-    const { title, content, token } = req.body;
+    const { title, content } = req.body;
+    const { token } = req.headers.authorization;
 
     if (!postId || !token) {
       return res.status(400).json({ message: "KEY_ERROR" });
@@ -48,7 +50,7 @@ const viewPost = async (req, res) => {
 // view user's post
 const searchPost = async (req, res) => {
   try {
-    const { token } = req.body;
+    const { token } = req.headers.authorization;
     await postService.searchPost(token);
     return res.status(200).send({ data: postService.userPosts });
   } catch (err) {
@@ -74,7 +76,7 @@ const deletePost = async (req, res) => {
 const likePost = async (res, req) => {
   try {
     const { postId } = req.param;
-    const { token } = req.body;
+    const { token } = req.headers.authorization;
     await postService.updateStatus(token, postId);
     return res.status(200).json({ message: "LIKE_STATUS_UPDATED" });
   } catch (err) {
