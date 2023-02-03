@@ -6,17 +6,36 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const signUp = async (name, email, password, profileImage) => {
-  const saltRounds = 12;
-  const hashPassword = await bcrypt.hash(password, saltRounds);
+  const pwValidation = new RegExp(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&]{8,}/
+  );
+
+  if (!pwValidation.test(password)) {
+    const err = new Error('🔐 Password Is Invalid Format');
+    err.code = 400;
+    throw err;
+  }
+
+  const emailValidation = new RegExp(
+    /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+  );
+
+  if (!emailValidation.test(email)) {
+    const err = new Error('📧 Email Is Invalid Format');
+    err.code = 400;
+    throw err;
+  }
 
   const [userInfo] = await userDao.getUser(email);
 
-  if (userInfo.email == email) {
+  if (userInfo) {
     const err = new Error('Email Already Exists.');
     err.code = 400;
     throw err;
   }
 
+  const saltRounds = 12;
+  const hashPassword = await bcrypt.hash(password, saltRounds);
   const createUser = await userDao.createUser(
     name,
     email,

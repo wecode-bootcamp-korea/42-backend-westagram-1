@@ -4,7 +4,7 @@ const signUp = async (req, res) => {
   try {
     const { name, email, password, profileImage } = req.body;
 
-    if (!name || !email || !password) {
+    if (!email || !password) {
       const err = new Error('⚠️ Key Error!');
       err.code = 400;
       throw err;
@@ -30,7 +30,7 @@ const signIn = async (req, res) => {
 
     const result = await userService.signIn(email, password);
 
-    return res.status(201).json({ accessToken: result });
+    return res.status(200).json({ accessToken: result });
   } catch (error) {
     return res.status(error.code).json({ message: error.message });
   }

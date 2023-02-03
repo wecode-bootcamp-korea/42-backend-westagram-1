@@ -5,9 +5,14 @@ const validateToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     const decoded = jwt.verify(token, SECRET_KEY);
-    if (decoded) {
-      next();
+    if (!decoded) {
+      throw new Error('Invalid User');
     }
+
+    req.user = decoded.userId;
+    console.log(req.user);
+
+    return next();
   } catch (err) {
     res.status(400).json({ message: 'Invalid Access Token' });
   }

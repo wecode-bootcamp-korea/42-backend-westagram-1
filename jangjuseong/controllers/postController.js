@@ -2,9 +2,10 @@ const postService = require('../services/postService');
 
 const createPost = async (req, res) => {
   try {
-    const { title, content, postImgUrl, userId } = req.body;
+    const { title, content, postImgUrl } = req.body;
+    const userId = req.user;
 
-    if (!title || !content || !postImgUrl || !userId) {
+    if (!title || !postImgUrl) {
       const err = new Error('⚠️ Key Error!');
       err.code = 400;
       throw err;
@@ -34,14 +35,9 @@ const getPostByUserId = async (req, res) => {
 
 const updatePost = async (req, res) => {
   try {
-    const { userId, postId } = req.params;
+    const { postId } = req.params;
     const { content } = req.body;
-
-    if (!content) {
-      const err = new Error('⚠️ Key Error!');
-      err.code = 400;
-      throw err;
-    }
+    const userId = req.user;
 
     const result = await postService.updatePost(content, userId, postId);
 

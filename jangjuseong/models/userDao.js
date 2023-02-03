@@ -10,7 +10,7 @@ const createUser = async (name, email, password, profileImage) => {
       profile_image
     )
     VALUES (
-      ?, 
+      ?,
       ?, 
       ?, 
       ?

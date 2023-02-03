@@ -7,8 +7,8 @@ const { validateToken } = require('../middlewares/auth');
 router.post('/', validateToken, postController.createPost);
 router.get('/', postController.getPosts);
 router.get('/:userId', postController.getPostByUserId);
-router.patch('/:postId/:userId', postController.updatePost);
-router.delete('/:postId', postController.deletePost);
+router.patch('/:postId', validateToken, postController.updatePost);
+router.delete('/:postId', validateToken, postController.deletePost);
 
 module.exports = {
   router,
