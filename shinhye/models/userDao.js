@@ -1,28 +1,15 @@
-//앞선 레이어들을 모두 무사히 통과한 데이터들을 db에 업데이트
-const AppDataSource = require("./index");
+const { AppDataSource } = require("./index");
 
-const createUser = async (
-  username,
-  firstName,
-  lastName,
-  age,
-  email,
-  hashedPassword,
-  profileImage
-) => {
+const createUser = async (email, profileImage, password) => {
   try {
-    return await AppDataSource.query(
+    await AppDataSource.query(
       `INSERT INTO users(
-                  username,
-                  first_name,
-                  last_name,
-                  age,
                   email,
-                  password,
                   profile_image,
-                  ) VALUES (?, ?, ?, ?, ?, ?, ?);
+                  password
+                  ) VALUES (?, ?, ?);
               `,
-      [username, firstName, lastName, age, email, hashedPassword, profileImage]
+      [email, profileImage, password]
     );
   } catch (err) {
     console.log(err);
@@ -30,20 +17,23 @@ const createUser = async (
   }
 };
 
-const getUser = async (email) => {
+const checkEmail = async (email) => {
   try {
-    return await AppDataSource.query(
+    const userInfo = await AppDataSource.query(
       `SELECT
-      *
+      id,
+      email
       FROM users
       WHERE email = ?
       `,
       [email]
     );
+
+    return userInfo;
   } catch (err) {
     console.log(err);
     throw error;
   }
 };
 
-module.exports = { createUser, getUser };
+module.exports = { createUser, checkEmail };

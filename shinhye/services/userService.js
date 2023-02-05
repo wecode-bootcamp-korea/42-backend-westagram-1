@@ -1,43 +1,28 @@
-//service - 비즈니스 규칙과 로직이 접목되는 레이어
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const userDao = require("../models/userDao");
 
-const saltRounds = 12;
-const secretKey = process.env.SECRET_KEY;
-
-const signUp = async (name, email, profile_image, password) => {
-  // 비밀번호 규칙
+const signUp = async (email, profileImage, password) => {
   const pwValidation = new RegExp(
     "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})"
   );
 
-  // 비밀번호 규칙 검사
   if (!pwValidation.test(password)) {
     const err = new Error("PASSWORD_IS_NOT_VALID");
-    err.statusCode = 409;
+    err.statusCode = 400;
     throw err;
   }
 
-  //이메일 중복 검사
-  const [userInfo] = await userDao.getUser(email);
+  const userInfo = await userDao.checkEmail(email);
   if (email === userInfo.email) {
     const err = new Error("USER_ALREADY_EXISTS");
     err.statusCode = 409;
     throw err;
   }
 
-  // bcrypt 모듈로 사용자 비밀번호 암호화하기
+  const saltRounds = 12;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
-  const createUser = await userDao.createUser(
-    name,
-    email,
-    profile_image,
-    hashedPassword
-  );
-
-  return createUser;
+  return userDao.createUser(email, profileImage, hashedPassword);
 };
 
 const login = async (email, password) => {
@@ -61,4 +46,4 @@ const login = async (email, password) => {
   }
 };
 
-module.exports = { signUp, login };
+module.exports = { signUp };

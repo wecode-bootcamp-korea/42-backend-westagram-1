@@ -18,4 +18,4 @@ AppDataSource.initialize()
     AppDataSource.destroy();
   });
 
-module.exports = AppDataSource;
+module.exports = { AppDataSource };
