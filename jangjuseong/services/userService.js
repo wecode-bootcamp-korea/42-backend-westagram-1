@@ -2,31 +2,15 @@ const userDao = require('../models/userDao');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const validate = require('../utils/validate-user');
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const signUp = async (name, email, password, profileImage) => {
-  const pwValidation = new RegExp(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@$#$%^&*\-?])[A-Za-z\d~!@$#$%^&*\-?]{8,}/
-  );
+  await validate.validatePassword(password);
+  await validate.validateEmail(email);
 
-  if (!pwValidation.test(password)) {
-    const err = new Error('🔐 Password Is Invalid Format');
-    err.code = 400;
-    throw err;
-  }
-
-  const emailValidation = new RegExp(
-    /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
-  );
-
-  if (!emailValidation.test(email)) {
-    const err = new Error('📧 Email Is Invalid Format');
-    err.code = 400;
-    throw err;
-  }
-
-  const [userInfo] = await userDao.getUser(email);
+  const [userInfo] = await userDao.getUserByEmail(email);
 
   if (userInfo) {
     const err = new Error('Email Already Exists.');
@@ -47,7 +31,10 @@ const signUp = async (name, email, password, profileImage) => {
 };
 
 const signIn = async (email, password) => {
-  const [userData] = await userDao.getUser(email);
+  await validate.validatePassword(password);
+  await validate.validateEmail(email);
+
+  const [userData] = await userDao.getUserByEmail(email);
 
   const payLoad = { userId: userData.id };
 

@@ -20,7 +20,7 @@ const createUser = async (name, email, password, profileImage) => {
   );
 };
 
-const getUser = async (email) => {
+const getUserByEmail = async (email) => {
   return await mysqlDataSource.query(
     `
     SELECT
@@ -36,5 +36,5 @@ const getUser = async (email) => {
 
 module.exports = {
   createUser,
-  getUser,
+  getUserByEmail,
 };

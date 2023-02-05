@@ -10,7 +10,6 @@ const validateToken = async (req, res, next) => {
     }
 
     req.user = decoded.userId;
-    console.log(req.user);
 
     return next();
   } catch (err) {
