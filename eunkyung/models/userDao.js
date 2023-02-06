@@ -25,7 +25,20 @@ const getUserByEmail = async (email) => {
   );
 };
 
+const userForVal = async (userId) => {
+  const [userInfo] = await mysqlDataSource.query(
+    `SELECT
+      id,
+      email
+    FROM users
+    WHERE id = ?`,
+    [userId]
+  );
+  return userInfo.id;
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
+  userForVal,
 };

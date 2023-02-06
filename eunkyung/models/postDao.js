@@ -74,8 +74,20 @@ const updatePost = async (content, userId, postId) => {
   return result;
 };
 
-const deletePost = async (postId) => {
-  await mysqlDataSource.query(`DELETE FROM posts WHERE posts.id = ?`, [postId]);
+const deletePost = async (userId, postId) => {
+  const [checkPostUserId] = await mysqlDataSource.query(
+    `SELECT 
+    id, 
+    user_id
+    FROM posts WHERE id = ?`,
+    [postId]
+  );
+  //console.log(checkPostUserId);
+  if (userId === checkPostUserId.user_id) {
+    return await mysqlDataSource.query(`DELETE FROM posts WHERE posts.id = ?`, [
+      postId,
+    ]);
+  }
 };
 
 module.exports = {

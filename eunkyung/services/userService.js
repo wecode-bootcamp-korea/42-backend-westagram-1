@@ -22,7 +22,7 @@ const login = async (email, password) => {
   }
   const checkPw = await bcrypt.compare(password, userInfo.password);
   const payLoad = { userId: userInfo.id };
-  const secretKey = process.env.secretKey;
+  const secretKey = process.env.SECRET_KEY;
 
   if (!checkPw) {
     throw new Error("please check your password");
